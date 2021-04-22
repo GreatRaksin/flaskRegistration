@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import LoginForm, RegisterForm
 from app import app, db
@@ -36,6 +36,8 @@ def login_page():
         if user:
             if check_password_hash(user.password, form.password.data):
                 flash('You have successfully signed in', 'success')
+                session['logged_in'] = True
+                session['username'] = user.username
                 return redirect(url_for('index_page'))
             else:
                 flash('Username or Password incorrect', 'danger')
@@ -43,3 +45,7 @@ def login_page():
     return render_template('login.html', form=form)
 
 
+@app.route('/logout')
+def logout():
+    session['logged_in'] = False
+    return redirect(url_for('index'))
