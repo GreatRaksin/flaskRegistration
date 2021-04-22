@@ -2,4 +2,8 @@
 
 {% block content %}
 
+    {% if session['logged_in'] %}
+        <h5>Welcome, {{ session['username'] }}!</h5>
+    {% endif %}
+
 {% endblock %}
